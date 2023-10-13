@@ -32,10 +32,14 @@ public class CustomerUserDetailsService implements UserDetailsService {
         if (userEntityWrapper.isPresent()) {
             userEntity = userEntityWrapper.get();
             return new User(userEntity.getEmail(), userEntity.getPassword(), new ArrayList<>());
+        } else {
+            throw new UsernameNotFoundException("User not found.");
         }
-
-        return null;
     }
 
-    public UserEntity get
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+
 }

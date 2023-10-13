@@ -1,5 +1,7 @@
 package com.example.cafemanagementsystem.service.impl;
 
+import com.example.cafemanagementsystem.config.security.CustomerUserDetailsService;
+import com.example.cafemanagementsystem.config.security.JwtUtil;
 import com.example.cafemanagementsystem.constants.CafeConstants;
 import com.example.cafemanagementsystem.model.entity.UserEntity;
 import com.example.cafemanagementsystem.repository.UserRepository;
@@ -9,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -20,9 +25,18 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final AuthenticationManager authenticationManager;
+
+    private final CustomerUserDetailsService customerUserDetailsService;
+
+    private final JwtUtil jwtUtil;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, AuthenticationManager authenticationManager, CustomerUserDetailsService customerUserDetailsService, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.authenticationManager = authenticationManager;
+        this.customerUserDetailsService = customerUserDetailsService;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -44,6 +58,32 @@ public class UserServiceImpl implements UserService {
             log.error("Problem in method signUp: {}", e);
             return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.BAD_REQUEST);
         }
+
+    }
+
+    @Override
+    public ResponseEntity<String> login(Map<String, String> requestMap) {
+        log.info("Inside login: {}", requestMap);
+        try {
+            Authentication auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(requestMap.get("email"), requestMap.get("password"))
+            );
+            if (auth.isAuthenticated()) {
+                if (customerUserDetailsService.getUserEntity().getStatus().equalsIgnoreCase("true")) {
+                    return new ResponseEntity<String>("{\"token\":"
+                            + jwtUtil.generateToken(customerUserDetailsService.getUserEntity().getEmail(),
+                            customerUserDetailsService.getUserEntity().getRole()) + "\"", HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<String>("\"message\":\"Wait for admin approval.\"", HttpStatus.BAD_REQUEST);
+                }
+            }
+
+
+        } catch (Exception ex) {
+            log.error("{}", ex);
+        }
+
+        return new ResponseEntity<String>("\"message\":\"Bad Credentials.\"", HttpStatus.BAD_REQUEST);
 
     }
 
