@@ -1,6 +1,7 @@
 package com.example.cafemanagementsystem.controller;
 
 import com.example.cafemanagementsystem.constants.CafeConstants;
+import com.example.cafemanagementsystem.model.dto.UserDto;
 import com.example.cafemanagementsystem.service.UserService;
 import com.example.cafemanagementsystem.util.CafeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -44,8 +47,25 @@ public class UserController {
         }
     }
 
-    @GetMapping(path = "/test")
-    public ResponseEntity<String> test(){
-        return CafeUtils.getResponseEntity("hello world", HttpStatus.OK);
+    @GetMapping("get")
+    public ResponseEntity<List<UserDto>> getAllUsers(){
+        try{
+            return userService.getAllUsers();
+        } catch (Exception ex){
+            log.error("Failed call getAllUsers method.",ex);
+            return new ResponseEntity<List<UserDto>>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+
+    @PostMapping("update")
+    public ResponseEntity<String> update(@RequestBody(required = true) Map<String, String> requestMap){
+        try{
+            return userService.update(requestMap);
+        } catch (Exception ex){
+            log.error("Failed call update.", ex);
+            return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 }
