@@ -10,6 +10,7 @@ import com.example.cafemanagementsystem.model.entity.UserEntity;
 import com.example.cafemanagementsystem.repository.UserRepository;
 import com.example.cafemanagementsystem.service.UserService;
 import com.example.cafemanagementsystem.util.CafeUtils;
+import com.example.cafemanagementsystem.util.EmailUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,13 +40,18 @@ public class UserServiceImpl implements UserService {
 
     private final JwtFilter jwtFilter;
 
+    private final EmailUtils emailUtils;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, AuthenticationManager authenticationManager, CustomerUserDetailsService customerUserDetailsService, JwtUtil jwtUtil, JwtFilter jwtFilter) {
+    public UserServiceImpl(UserRepository userRepository, AuthenticationManager authenticationManager,
+                           CustomerUserDetailsService customerUserDetailsService, JwtUtil jwtUtil,
+                           JwtFilter jwtFilter, EmailUtils emailUtils) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.customerUserDetailsService = customerUserDetailsService;
         this.jwtUtil = jwtUtil;
         this.jwtFilter = jwtFilter;
+        this.emailUtils = emailUtils;
     }
 
     @Override
@@ -115,11 +121,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<String> update(Map<String, String> requestMap) {
         try {
-            if (jwtFilter.isUser()) {
+            if (jwtFilter.isAdmin()) {
                 Optional<UserEntity> userEntityWrapper = userRepository.findById(Integer.parseInt(requestMap.get("id")));
                 if (userEntityWrapper.isPresent()) {
                     userRepository.updateStatus(requestMap.get("status"), Integer.parseInt(requestMap.get("id")));
-                    sendMailToAllAdmin(requestMap.get("status"), userEntityWrapper.get().getEmail(), userRepository.findAllAdmin());
+                    sendMailToAllAdmin(requestMap.get("status"), userEntityWrapper.get().getEmail(), userRepository.findByStatus("admin"));
                     return CafeUtils.getResponseEntity("User Status Updated Successfully", HttpStatus.OK);
                 } else {
                     return CafeUtils.getResponseEntity("User id does not exist", HttpStatus.OK);
@@ -133,8 +139,19 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void sendMailToAllAdmin(String status, String email, List<UserEntity> allAdmin) {
-        //TODO: implement me please
+    private void sendMailToAllAdmin(String status, String user, List<UserEntity> allAdmin) {
+        allAdmin.remove(jwtFilter.getCurrentUser());
+        if (status != null && status.equalsIgnoreCase("true")) {
+            emailUtils.sendSimpleMessage(jwtFilter.getCurrentUser(),
+                    "Account Approve",
+                    String.format("USER: %s is approved by ADMIN: %s", user, jwtFilter.getCurrentUser()),
+                    allAdmin.stream().map(a->a.getEmail()).collect(Collectors.toList()));
+        } else {
+            emailUtils.sendSimpleMessage(jwtFilter.getCurrentUser(),
+                    "Account Disable",
+                    String.format("USER: %s is disabled by ADMIN: %s", user, jwtFilter.getCurrentUser()),
+                    allAdmin.stream().map(a->a.getEmail()).collect(Collectors.toList()));
+        }
     }
 
     private boolean validateSignUpMap(Map<String, String> requestMap) {

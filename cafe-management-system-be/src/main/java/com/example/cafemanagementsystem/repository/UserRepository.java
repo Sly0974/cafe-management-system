@@ -1,8 +1,10 @@
 package com.example.cafemanagementsystem.repository;
 
 import com.example.cafemanagementsystem.model.entity.UserEntity;
-import org.apache.catalina.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +16,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     Optional<UserEntity> findByEmail(String email);
 
-    Integer updateStatus(@Param("status") String status, @Param("id") Integer id);
+    @Transactional
+    @Modifying
+    @Query("update UserEntity u set u.status = :status where u.id = :id")
+    Integer updateStatus(@Param(value = "status") String status, @Param(value = "id") Integer id);
 
-    List<UserEntity> findAllAdmin();
+    List<UserEntity> findByStatus(String status);
 }
