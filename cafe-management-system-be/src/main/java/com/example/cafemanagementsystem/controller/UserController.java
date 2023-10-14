@@ -38,34 +38,65 @@ public class UserController {
     }
 
     @PostMapping(path = "/login")
-    public ResponseEntity<String> login(@RequestBody(required = true) Map<String,String> requestMap){
-        try{
+    public ResponseEntity<String> login(@RequestBody(required = true) Map<String, String> requestMap) {
+        try {
             return userService.login(requestMap);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Failed call signup: {}", ex);
             return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("get")
-    public ResponseEntity<List<UserDto>> getAllUsers(){
-        try{
+    @GetMapping("/get")
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        try {
             return userService.getAllUsers();
-        } catch (Exception ex){
-            log.error("Failed call getAllUsers method.",ex);
+        } catch (Exception ex) {
+            log.error("Failed call getAllUsers method.", ex);
             return new ResponseEntity<List<UserDto>>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PostMapping("update")
-    public ResponseEntity<String> update(@RequestBody(required = true) Map<String, String> requestMap){
-        try{
+    @PostMapping("/update")
+    public ResponseEntity<String> update(@RequestBody(required = true) Map<String, String> requestMap) {
+        try {
             return userService.update(requestMap);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Failed call update.", ex);
             return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/checkToken")
+    ResponseEntity<String> checkToken() {
+        try {
+            return userService.checkToken();
+        } catch (Exception ex) {
+            log.error("Failed call checkToken", ex);
+            return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/changePassword")
+    ResponseEntity<String> changePassword(@RequestBody Map<String, String> requestMap) {
+        try {
+            return userService.changePassword(requestMap);
+        } catch (Exception ex) {
+            log.error("Failed call changePassword", ex);
+            return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/forgotPassword")
+    ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> requestMap){
+        try {
+            return userService.forgotPassword(requestMap);
+        } catch (Exception ex) {
+            log.error("Failed call forgotPassword", ex);
+            return CafeUtils.getResponseEntity(CafeConstants.SOMETHING_WENT_WRONG, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 }
