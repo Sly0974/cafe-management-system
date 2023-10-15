@@ -1,11 +1,11 @@
 package com.example.cafemanagementsystem.model.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.Set;
 
 
@@ -13,6 +13,11 @@ import java.util.Set;
 @DynamicUpdate
 @DynamicInsert
 @Table(name = "category")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
 public class CategoryEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,59 +30,10 @@ public class CategoryEntity implements Serializable {
     @Column(name = "name")
     private String name;
 
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<ProductEntity> products;
 
-    public CategoryEntity() {
-    }
-
-    public CategoryEntity(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CategoryEntity that = (CategoryEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name);
-    }
-
-    public Set<ProductEntity> getProducts() {
-        return products;
-    }
-
-    public void setProducts(Set<ProductEntity> products) {
-        this.products = products;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name);
-    }
-
-    @Override
-    public String toString() {
-        return "CategoryEntity{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
 }
