@@ -14,7 +14,7 @@ public class ProductDto {
 
     private String name;
 
-    private CategoryEntity category;
+    private CategoryDto category;
 
     private String description;
 

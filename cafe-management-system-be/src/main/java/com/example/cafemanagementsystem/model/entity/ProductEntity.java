@@ -89,6 +89,14 @@ public class ProductEntity implements Serializable {
         this.status = status;
     }
 
+    public CategoryEntity getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryEntity category) {
+        this.category = category;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
