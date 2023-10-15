@@ -107,7 +107,7 @@ public class ProductServiceImpl implements ProductService {
                         .collect(Collectors.toList());
                 return new ResponseEntity<>(products, HttpStatus.OK);
             } else{
-                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
         } catch (Exception ex) {
             log.error("Failed call findByCategoryId", ex);
