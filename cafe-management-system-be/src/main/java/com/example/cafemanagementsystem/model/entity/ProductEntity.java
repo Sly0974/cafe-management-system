@@ -24,7 +24,6 @@ public class ProductEntity implements Serializable {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("id")
     @JoinColumn(name = "category_id", nullable = false)
     private CategoryEntity category;
 

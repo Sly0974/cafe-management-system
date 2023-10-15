@@ -1,7 +1,6 @@
 package com.example.cafemanagementsystem.controller;
 
 import com.example.cafemanagementsystem.constants.CafeConstants;
-import com.example.cafemanagementsystem.model.dto.CategoryDto;
 import com.example.cafemanagementsystem.model.dto.ProductDto;
 import com.example.cafemanagementsystem.service.ProductService;
 import com.example.cafemanagementsystem.util.CafeUtils;
@@ -39,9 +38,9 @@ public class ProductController {
     }
 
     @GetMapping
-    ResponseEntity<List<ProductDto>> findAll() {
+    ResponseEntity<List<ProductDto>> findAll(@RequestParam(required = false) Integer categoryId) {
         try {
-            return productService.findAll();
+            return categoryId == null ? productService.findAll() : productService.findByCategoryId(categoryId);
         } catch (Exception ex) {
             log.error("Failed call findAll", ex);
             return new ResponseEntity<>(new ArrayList<ProductDto>(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -53,10 +52,20 @@ public class ProductController {
         try {
             return productService.findById(id);
         } catch (Exception ex) {
-            log.error("Failed call delete", ex);
+            log.error("Failed call findById", ex);
             return new ResponseEntity<>(new ProductDto(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+//    @GetMapping
+//    ResponseEntity<List<ProductDto>> findByCategoryId(@NotNull @RequestParam Integer categoryId) {
+//        try {
+//            return productService.findByCategoryId(categoryId);
+//        } catch (Exception ex) {
+//            log.error("Failed call findByCategoryId", ex);
+//            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     @PutMapping
     ResponseEntity<String> update(@RequestBody ProductDto productDto) {

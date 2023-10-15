@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
                 Optional<UserEntity> userEntityWrapper = userRepository.findById(Integer.parseInt(requestMap.get("id")));
                 if (userEntityWrapper.isPresent()) {
                     userRepository.updateStatus(requestMap.get("status"), Integer.parseInt(requestMap.get("id")));
-                    sendMailToAllAdmin(requestMap.get("status"), userEntityWrapper.get().getEmail(), userRepository.findByStatus("admin"));
+                    sendMailToAllAdmin(requestMap.get("status"), userEntityWrapper.get().getEmail(), userRepository.findByRole("admin"));
                     return CafeUtils.getResponseEntity("User Status Updated Successfully", HttpStatus.OK);
                 } else {
                     return CafeUtils.getResponseEntity("User id does not exist", HttpStatus.OK);

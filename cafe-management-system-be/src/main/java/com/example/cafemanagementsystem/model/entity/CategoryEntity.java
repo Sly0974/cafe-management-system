@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -23,6 +24,9 @@ public class CategoryEntity implements Serializable {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
+    private Set<ProductEntity> products;
 
     public CategoryEntity() {
     }
@@ -54,6 +58,14 @@ public class CategoryEntity implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         CategoryEntity that = (CategoryEntity) o;
         return Objects.equals(id, that.id) && Objects.equals(name, that.name);
+    }
+
+    public Set<ProductEntity> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<ProductEntity> products) {
+        this.products = products;
     }
 
     @Override

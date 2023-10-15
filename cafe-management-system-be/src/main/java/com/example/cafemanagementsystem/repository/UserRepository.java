@@ -20,6 +20,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     @Modifying
     @Query("update UserEntity u set u.status = :status where u.id = :id")
     Integer updateStatus(@Param(value = "status") String status, @Param(value = "id") Integer id);
-
-    List<UserEntity> findByStatus(String status);
+    List<UserEntity> findByRole(String role);
 }

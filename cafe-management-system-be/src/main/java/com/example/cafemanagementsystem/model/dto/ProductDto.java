@@ -14,11 +14,14 @@ public class ProductDto {
 
     private String name;
 
-    private CategoryDto category;
-
     private String description;
 
     private Integer price;
 
     private String status;
+
+    private Integer categoryId;
+
+    private String categoryName;
+
 }
