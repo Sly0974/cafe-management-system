@@ -15,12 +15,12 @@ it consumes REST API from cafe-management-system-be service.
 ![Application screens gif](images/application_screens.gif)
 
 ### cafe-management-system-be
-Service provide backend implementation of application - REST API and JWT authentication.
+Service provide backend implementation of application - connection to database, REST API and JWT authentication.
 
 ![Swagger api](images/swagger_api_screen.jpg)
 
 ### cafe-management-system-db
-Service contains cafe database in MySQL database for store all applications data.
+Service contains cafe database in MySQL database for store all application data.
 
 ![Database tables](images/database_tables.jpg)
 
