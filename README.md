@@ -12,17 +12,17 @@ The application uses technology:
 Service provide frontend implementation of the application, 
 it consumes REST API from cafe-management-system-be service.
 
-![Application screens gif](images/application_screens.gif)
+![Application screens gif](docs/images/application_screens.gif)
 
 ### cafe-management-system-be
 Service provide backend implementation of application - connection to database, REST API and JWT authentication.
 
-![Swagger api](images/swagger_api_screen.jpg)
+![Swagger api](docs/images/swagger_api_screen.jpg)
 
 ### cafe-management-system-db
 Service contains cafe database in MySQL database for store all application data.
 
-![Database tables](images/database_tables.jpg)
+![Database tables](docs/images/database_tables.jpg)
 
 ## How to run
 ```bash
