@@ -36,11 +36,11 @@ public class PdfUtils {
         switch (type) {
             case "Header":
                 Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLDOBLIQUE, 18, BaseColor.BLACK);
-                headerFont.setSize(Font.BOLD);
+                headerFont.setStyle(Font.BOLD);
                 return headerFont;
             case "Data":
                 Font dataFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 11, BaseColor.BLACK);
-                dataFont.setSize(Font.BOLD);
+                dataFont.setStyle(Font.BOLD);
                 return dataFont;
             default:
                 return new Font();
@@ -66,7 +66,7 @@ public class PdfUtils {
 
     private static Paragraph createDataSection(BillDto billDto) {
         final String data = String.format(
-                "Name: {} \n Contact Number: {} \n Email: {} \n Payment Method: {} \n ",
+                "Name: %s \nContact Number: %s \nEmail: %s \nPayment Method: %s \n",
                 billDto.getName(), billDto.getContactNumber(), billDto.getEmail(), billDto.getPaymentMethod());
         return new Paragraph(data + "\n \n", getFont("Data"));
     }
@@ -105,7 +105,7 @@ public class PdfUtils {
 
     private static Paragraph createFooter(BillDto billDto) {
         return new Paragraph(
-                String.format("Total : %s \n Thank you for visiting. Please visit again!!", billDto.getTotal()),
+                String.format("Total : %s \nThank you for visiting. Please visit again!!", billDto.getTotal()),
                 getFont("Data"));
     }
 }
