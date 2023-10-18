@@ -17,11 +17,9 @@ import java.util.stream.Stream;
 
 public class PdfUtils {
 
-    public static final String STORE_LOCATION = "";
-
-    public static void generateAndSaveBillReport(BillDto billDto) throws FileNotFoundException, DocumentException, JsonProcessingException {
+    public static void generateAndSaveBillReport(BillDto billDto, String storeLocation) throws FileNotFoundException, DocumentException, JsonProcessingException {
         Document document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream(STORE_LOCATION + billDto.getUuid() + ".pdf"));
+        PdfWriter.getInstance(document, new FileOutputStream(storeLocation + billDto.getUuid() + ".pdf"));
 
         document.open();
         document.add(createRectangle());

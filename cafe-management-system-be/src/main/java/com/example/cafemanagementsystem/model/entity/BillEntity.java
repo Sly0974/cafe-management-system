@@ -15,6 +15,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class BillEntity {
 
     private static final long serialVersionUID = 1L;
