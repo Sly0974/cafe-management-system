@@ -35,5 +35,5 @@ docker compose up
 
 ### Application endpoints
 * **cafe-management-system-db**: jdbc:mysql://localhost:33061/cafe
-* **cafe-management-system-be**: http://localhost:8081/
+* **cafe-management-system-be**: http://localhost:8081/swagger-ui/index.html
 * **cafe-management-system-fe**: http://localhost:4200/
