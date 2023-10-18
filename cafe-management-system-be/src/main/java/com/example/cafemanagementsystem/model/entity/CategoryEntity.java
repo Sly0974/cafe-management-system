@@ -18,6 +18,7 @@ import java.util.Set;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class CategoryEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

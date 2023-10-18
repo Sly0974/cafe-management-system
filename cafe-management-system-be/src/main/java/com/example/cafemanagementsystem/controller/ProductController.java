@@ -57,16 +57,6 @@ public class ProductController {
         }
     }
 
-//    @GetMapping
-//    ResponseEntity<List<ProductDto>> findByCategoryId(@NotNull @RequestParam Integer categoryId) {
-//        try {
-//            return productService.findByCategoryId(categoryId);
-//        } catch (Exception ex) {
-//            log.error("Failed call findByCategoryId", ex);
-//            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-
     @PutMapping
     ResponseEntity<String> update(@RequestBody ProductDto productDto) {
         try {
@@ -77,7 +67,7 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping(path = "/{id}")
     ResponseEntity<String> delete(@PathVariable Integer id) {
         try {
             return productService.delete(id);

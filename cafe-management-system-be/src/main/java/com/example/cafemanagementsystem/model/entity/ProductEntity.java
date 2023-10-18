@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class ProductEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
