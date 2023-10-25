@@ -1,18 +1,16 @@
-FROM node:18.18-alpine
+FROM node:14.15.4-alpine
 
 WORKDIR /app
 
 # Copying necessary files.
 COPY . .
 
-ENV NODE_OPTIONS --openssl-legacy-provider
-
-RUN export NODE_OPTIONS=--openssl-legacy-provider
-
-RUN npm install -g @angular/cli
+# Install dependencies
+RUN npm install -g @angular/cli@13.2.2
 RUN npm install
 
+# Build project
 RUN npm run build --prod
 
 # Command we want to run when our image is executed inside a container
-CMD ["ng", "serve"]
+CMD ng serve --host 0.0.0.0 --port 4200
