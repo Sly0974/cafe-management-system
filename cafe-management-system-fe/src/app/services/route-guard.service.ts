@@ -18,7 +18,7 @@ export class RouteGuardService {
     let expectedRoleArray = router.data;
     expectedRoleArray = expectedRoleArray.expectedRole;
 
-    const token: any = localStorage.getItem("item");
+    const token: any = localStorage.getItem("token");
 
     var tokenPayload: any;
 
