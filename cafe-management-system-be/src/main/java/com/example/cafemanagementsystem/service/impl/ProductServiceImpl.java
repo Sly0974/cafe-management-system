@@ -10,6 +10,7 @@ import com.example.cafemanagementsystem.repository.CategoryRepository;
 import com.example.cafemanagementsystem.repository.ProductRepository;
 import com.example.cafemanagementsystem.service.ProductService;
 import com.example.cafemanagementsystem.util.CafeUtils;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +31,9 @@ public class ProductServiceImpl implements ProductService {
 
     private final JwtFilter jwtFilter;
 
-    public ProductServiceImpl(ProductRepository productRepository,
-                              CategoryRepository categoryRepository,
-                              JwtFilter jwtFilter) {
+    public ProductServiceImpl(@NotNull final ProductRepository productRepository,
+                              @NotNull final CategoryRepository categoryRepository,
+                              @NotNull final JwtFilter jwtFilter) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.jwtFilter = jwtFilter;
@@ -40,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ResponseEntity<String> create(ProductDto productDto) {
+    public ResponseEntity<String> create(@NotNull final ProductDto productDto) {
         try {
             if (jwtFilter.isAdmin()) {
                 ProductEntity productEntity = ProductMapper.INSTANCE.productDtoToProductEntity(productDto);
@@ -78,7 +79,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseEntity<ProductDto> findById(Integer id) {
+    public ResponseEntity<ProductDto> findById(@NotNull final Integer id) {
         try {
             final Optional<ProductEntity> productEntityWrapper = productRepository.findById(id);
             if (productEntityWrapper.isPresent()) {
@@ -96,17 +97,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseEntity<List<ProductDto>> findByCategoryId(Integer categoryId) {
+    public ResponseEntity<List<ProductDto>> findByCategoryId(@NotNull final Integer categoryId) {
         try {
             Optional<CategoryEntity> categoryEntityWrapper = categoryRepository.findById(categoryId);
 
-            if(categoryEntityWrapper.isPresent()){
+            if (categoryEntityWrapper.isPresent()) {
                 List<ProductDto> products = categoryEntityWrapper.get().getProducts()
                         .stream()
                         .map(product -> ProductMapper.INSTANCE.productEntityToProductDto(product))
                         .collect(Collectors.toList());
                 return new ResponseEntity<>(products, HttpStatus.OK);
-            } else{
+            } else {
                 return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
             }
         } catch (Exception ex) {
@@ -116,30 +117,30 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseEntity<String> update(ProductDto productDto) {
+    public ResponseEntity<String> update(@NotNull final ProductDto productDto) {
         try {
             if (jwtFilter.isAdmin()) {
                 Optional<ProductEntity> productEntityWrapper = productRepository.findById(productDto.getId());
                 if (productEntityWrapper.isPresent()) {
                     ProductEntity productEntity = productEntityWrapper.get();
 
-                    if(productDto.getName()!=null){
+                    if (productDto.getName() != null) {
                         productEntity.setName(productDto.getName());
                     }
-                    if(productDto.getDescription()!=null){
+                    if (productDto.getDescription() != null) {
                         productEntity.setDescription(productDto.getDescription());
                     }
-                    if(productDto.getPrice()!=null){
+                    if (productDto.getPrice() != null) {
                         productEntity.setPrice(productDto.getPrice());
                     }
-                    if(productDto.getStatus()!=null){
+                    if (productDto.getStatus() != null) {
                         productEntity.setStatus(productDto.getStatus());
                     }
 
-                    if(productDto.getCategoryId() != null){
+                    if (productDto.getCategoryId() != null) {
                         Optional<CategoryEntity> categoryEntityWrapper = categoryRepository.findById(productDto.getCategoryId());
 
-                        if(categoryEntityWrapper.isEmpty()){
+                        if (categoryEntityWrapper.isEmpty()) {
                             return CafeUtils.getResponseEntity(String.format("Category %s not fond", productDto.getCategoryId()), HttpStatus.NOT_FOUND);
                         }
 
@@ -162,7 +163,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseEntity<String> delete(Integer id) {
+    public ResponseEntity<String> delete(@NotNull final Integer id) {
         try {
             if (jwtFilter.isAdmin()) {
                 if (productRepository.existsById(id)) {
@@ -181,7 +182,8 @@ public class ProductServiceImpl implements ProductService {
         }
     }
 
-    private ProductEntity updateProductEntity(ProductDto productDto, Optional<ProductEntity> productEntityWrapper) {
+    private ProductEntity updateProductEntity(@NotNull final ProductDto productDto,
+                                              @NotNull final Optional<ProductEntity> productEntityWrapper) {
         ProductEntity productEntity = productEntityWrapper.get();
 
         productEntity.setId(productDto.getId());

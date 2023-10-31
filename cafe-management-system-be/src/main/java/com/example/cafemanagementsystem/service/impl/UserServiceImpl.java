@@ -12,6 +12,7 @@ import com.example.cafemanagementsystem.service.UserService;
 import com.example.cafemanagementsystem.util.CafeUtils;
 import com.example.cafemanagementsystem.util.EmailUtils;
 import com.google.common.base.Strings;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,9 +45,12 @@ public class UserServiceImpl implements UserService {
     private final EmailUtils emailUtils;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, AuthenticationManager authenticationManager,
-                           CustomerUserDetailsService customerUserDetailsService, JwtUtil jwtUtil,
-                           JwtFilter jwtFilter, EmailUtils emailUtils) {
+    public UserServiceImpl(@NotNull final UserRepository userRepository,
+                           @NotNull final AuthenticationManager authenticationManager,
+                           @NotNull final CustomerUserDetailsService customerUserDetailsService,
+                           @NotNull final JwtUtil jwtUtil,
+                           @NotNull final JwtFilter jwtFilter,
+                           @NotNull final EmailUtils emailUtils) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
         this.customerUserDetailsService = customerUserDetailsService;
@@ -56,7 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<String> signUp(Map<String, String> requestMap) {
+    public ResponseEntity<String> signUp(@NotNull final Map<String, String> requestMap) {
         log.info("Inside signup: {}", requestMap);
         try {
             if (validateSignUpMap(requestMap)) {
@@ -78,7 +82,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<String> login(Map<String, String> requestMap) {
+    public ResponseEntity<String> login(@NotNull final Map<String, String> requestMap) {
         log.info("Inside login: {}", requestMap);
         try {
             Authentication auth = authenticationManager.authenticate(
@@ -120,7 +124,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<String> update(Map<String, String> requestMap) {
+    public ResponseEntity<String> update(@NotNull final Map<String, String> requestMap) {
         try {
             if (jwtFilter.isAdmin()) {
                 Optional<UserEntity> userEntityWrapper = userRepository.findById(Integer.parseInt(requestMap.get("id")));
@@ -146,7 +150,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<String> changePassword(Map<String, String> requestMap) {
+    public ResponseEntity<String> changePassword(@NotNull final Map<String, String> requestMap) {
         try {
             Optional<UserEntity> userWrapper = userRepository.findByEmail(jwtFilter.getCurrentUser());
             if (userWrapper.isPresent()) {
@@ -166,7 +170,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<String> forgotPassword(Map<String, String> requestMap) {
+    public ResponseEntity<String> forgotPassword(@NotNull final Map<String, String> requestMap) {
         try {
             Optional<UserEntity> userWrapper = userRepository.findByEmail(requestMap.get("email"));
             if (userWrapper.isPresent() && !Strings.isNullOrEmpty(userWrapper.get().getEmail())) {
@@ -181,7 +185,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void sendMailToAllAdmin(String status, String user, List<UserEntity> allAdmin) {
+    private void sendMailToAllAdmin(final String status,
+                                    final String user,
+                                    final List<UserEntity> allAdmin) {
         allAdmin.remove(jwtFilter.getCurrentUser());
         if (status != null && status.equalsIgnoreCase("true")) {
             emailUtils.sendSimpleMessage(jwtFilter.getCurrentUser(),
@@ -196,14 +202,14 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private boolean validateSignUpMap(Map<String, String> requestMap) {
+    private boolean validateSignUpMap(@NotNull final Map<String, String> requestMap) {
         return requestMap.containsKey("name")
                 && requestMap.containsKey("contactNumber")
                 && requestMap.containsKey("email")
                 && requestMap.containsKey("password");
     }
 
-    private UserEntity getUserFromMap(Map<String, String> requestMap) {
+    private UserEntity getUserFromMap(@NotNull final Map<String, String> requestMap) {
         final UserEntity user = new UserEntity();
         user.setName(requestMap.get("name"));
         user.setContactNumber(requestMap.get("contactNumber"));

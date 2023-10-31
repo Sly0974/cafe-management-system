@@ -5,9 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportItemDto{
+public class ReportItemDto {
 
     private Integer id;
 

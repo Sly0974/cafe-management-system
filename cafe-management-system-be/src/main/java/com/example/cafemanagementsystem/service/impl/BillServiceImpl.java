@@ -9,6 +9,7 @@ import com.example.cafemanagementsystem.repository.BillRepository;
 import com.example.cafemanagementsystem.service.BillService;
 import com.example.cafemanagementsystem.util.CafeUtils;
 import com.example.cafemanagementsystem.util.PdfUtils;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,13 +34,13 @@ public class BillServiceImpl implements BillService {
 
     public static final String PDF_STORE_LOCATION = "";
 
-    public BillServiceImpl(BillRepository billRepository, JwtFilter jwtFilter) {
+    public BillServiceImpl(@NotNull final BillRepository billRepository, @NotNull final JwtFilter jwtFilter) {
         this.billRepository = billRepository;
         this.jwtFilter = jwtFilter;
     }
 
     @Override
-    public ResponseEntity<String> generateReport(BillDto billDto) {
+    public ResponseEntity<String> generateReport(@NotNull final BillDto billDto) {
         try {
             billDto.setUuid(CafeUtils.getUUID());
             billDto.setCreatedBy(jwtFilter.getCurrentUser());
@@ -77,7 +78,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public ResponseEntity<String> delete(Integer id) {
+    public ResponseEntity<String> delete(@NotNull final Integer id) {
         try {
             if (billRepository.existsById(id)) {
                 BillDto billDto = BillMapper.INSTANCE.billEntityToBillDto(billRepository.findById(id).get());
@@ -94,7 +95,7 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public ResponseEntity<byte[]> findPdf(Integer id) {
+    public ResponseEntity<byte[]> findPdf(@NotNull final Integer id) {
         try {
             if (billRepository.existsById(id)) {
                 BillDto billDto = BillMapper.INSTANCE.billEntityToBillDto(billRepository.findById(id).get());

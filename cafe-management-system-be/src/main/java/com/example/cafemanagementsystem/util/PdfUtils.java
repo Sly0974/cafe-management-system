@@ -5,20 +5,35 @@ import com.example.cafemanagementsystem.model.dto.ReportItemDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.itextpdf.text.*;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import jakarta.validation.constraints.NotNull;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class PdfUtils {
+public final class PdfUtils {
 
-    public static void generateAndSaveBillReport(BillDto billDto, String storeLocation) throws FileNotFoundException, DocumentException, JsonProcessingException {
-        Document document = new Document();
+    private PdfUtils() {
+
+    }
+
+    public static void generateAndSaveBillReport(@NotNull final BillDto billDto,
+                                                 @NotNull final String storeLocation)
+            throws FileNotFoundException, DocumentException, JsonProcessingException {
+        final Document document = new Document();
         PdfWriter.getInstance(document, new FileOutputStream(storeLocation + billDto.getUuid() + ".pdf"));
 
         document.open();
@@ -30,7 +45,7 @@ public class PdfUtils {
         document.close();
     }
 
-    private static Font getFont(String type) {
+    private static Font getFont(final String type) {
         switch (type) {
             case "Header":
                 Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLDOBLIQUE, 18, BaseColor.BLACK);
@@ -62,14 +77,14 @@ public class PdfUtils {
         return header;
     }
 
-    private static Paragraph createDataSection(BillDto billDto) {
+    private static Paragraph createDataSection(final BillDto billDto) {
         final String data = String.format(
                 "Name: %s \nContact Number: %s \nEmail: %s \nPayment Method: %s \n",
                 billDto.getName(), billDto.getContactNumber(), billDto.getEmail(), billDto.getPaymentMethod());
         return new Paragraph(data + "\n \n", getFont("Data"));
     }
 
-    private static PdfPTable createItemsTable(String productDetail) throws JsonProcessingException {
+    private static PdfPTable createItemsTable(final String productDetail) throws JsonProcessingException {
         final PdfPTable table = new PdfPTable(5);
 
         //Add table header
@@ -101,7 +116,7 @@ public class PdfUtils {
         return table;
     }
 
-    private static Paragraph createFooter(BillDto billDto) {
+    private static Paragraph createFooter(@NotNull final BillDto billDto) {
         return new Paragraph(
                 String.format("Total : %s \nThank you for visiting. Please visit again!!", billDto.getTotal()),
                 getFont("Data"));

@@ -8,6 +8,7 @@ import com.example.cafemanagementsystem.model.entity.CategoryEntity;
 import com.example.cafemanagementsystem.repository.CategoryRepository;
 import com.example.cafemanagementsystem.service.CategoryService;
 import com.example.cafemanagementsystem.util.CafeUtils;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,13 +29,14 @@ public class CategoryServiceImpl implements CategoryService {
     private final JwtFilter jwtFilter;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, JwtFilter jwtFilter) {
+    public CategoryServiceImpl(@NotNull final CategoryRepository categoryRepository,
+                               @NotNull final JwtFilter jwtFilter) {
         this.categoryRepository = categoryRepository;
         this.jwtFilter = jwtFilter;
     }
 
     @Override
-    public ResponseEntity<String> create(CategoryDto categoryDto) {
+    public ResponseEntity<String> create(@NotNull final CategoryDto categoryDto) {
         try {
             if (jwtFilter.isAdmin()) {
                 CategoryEntity categoryEntity = CategoryMapper.INSTANCE.categoryDtoToCategoryEntity(categoryDto);
@@ -52,7 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public ResponseEntity<List<CategoryDto>> findAll() {
         try {
-            List<CategoryDto> categories = categoryRepository.findAll()
+            final List<CategoryDto> categories = categoryRepository.findAll()
                     .stream()
                     .map(c -> CategoryMapper.INSTANCE.categoryEntityToCategoryDto(c))
                     .collect(Collectors.toList());
@@ -64,11 +66,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ResponseEntity<String> update(CategoryDto categoryDto) {
+    public ResponseEntity<String> update(@NotNull final CategoryDto categoryDto) {
         try {
             if (jwtFilter.isAdmin()) {
                 Optional<CategoryEntity> categoryWrapper = categoryRepository.findById(categoryDto.getId());
-                if(categoryWrapper.isPresent()){
+                if (categoryWrapper.isPresent()) {
                     CategoryEntity category = categoryWrapper.get();
                     category.setName(categoryDto.getName());
                     categoryRepository.save(category);

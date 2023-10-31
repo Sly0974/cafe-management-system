@@ -1,19 +1,17 @@
 package com.example.cafemanagementsystem.util;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Date;
 
-public class CafeUtils {
+public final class CafeUtils {
 
     private CafeUtils() {
 
     }
 
-    public static ResponseEntity<String> getResponseEntity(String responseMessage, HttpStatus httpStatus) {
+    public static ResponseEntity<String> getResponseEntity(final String responseMessage, final HttpStatus httpStatus) {
         return new ResponseEntity<String>("{\"message\":\"" + responseMessage + "\"}", httpStatus);
     }
 

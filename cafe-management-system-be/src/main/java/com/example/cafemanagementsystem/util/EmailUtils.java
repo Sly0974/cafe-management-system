@@ -2,6 +2,7 @@ package com.example.cafemanagementsystem.util;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
@@ -12,13 +13,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class EmailUtils {
+public final class EmailUtils {
 
     private final JavaMailSender emailSender;
 
     private final Environment environment;
 
-    private final static String FORGOT_PASSWD_TEMPLATE =
+    private static final String FORGOT_PASSWD_TEMPLATE =
             """
                     <h3>Your Login details for Cafe Management System</h3>
                     <p><b>Email: </b> %s <br><b>Password: </b> %s <br>
@@ -26,12 +27,16 @@ public class EmailUtils {
                     """;
 
     @Autowired
-    public EmailUtils(JavaMailSender emailSender, Environment environment) {
+    public EmailUtils(@NotNull final JavaMailSender emailSender,
+                      @NotNull final Environment environment) {
         this.emailSender = emailSender;
         this.environment = environment;
     }
 
-    public void sendSimpleMessage(String to, String subject, String text, List<String> list) {
+    public void sendSimpleMessage(@NotNull final String to,
+                                  @NotNull final String subject,
+                                  @NotNull final String text,
+                                  final List<String> list) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(environment.getProperty("spring.mail.username"));
         message.setTo(to);
@@ -43,7 +48,9 @@ public class EmailUtils {
         emailSender.send(message);
     }
 
-    public void forgotMail(String to, String subject, String password) throws MessagingException {
+    public void forgotMail(@NotNull final String to,
+                           @NotNull final String subject,
+                           @NotNull final String password) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setFrom(environment.getProperty("spring.mail.username"));

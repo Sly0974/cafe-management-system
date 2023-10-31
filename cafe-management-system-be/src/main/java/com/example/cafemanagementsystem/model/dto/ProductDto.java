@@ -1,6 +1,5 @@
 package com.example.cafemanagementsystem.model.dto;
 
-import com.example.cafemanagementsystem.model.entity.CategoryEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
