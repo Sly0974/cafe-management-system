@@ -7,8 +7,8 @@ import { environment } from 'src/environments/environment';
 })
 export class ProductService {
 
-  readonly productsUrl: string = environment.apiUrl + "/products"
-  readonly defaultHeaders = new HttpHeaders().set("Content-Type", "application/json");
+  private readonly productsUrl: string = environment.apiUrl + "/products"
+  private readonly defaultHeaders = new HttpHeaders().set("Content-Type", "application/json");
 
   constructor(private httpClient: HttpClient) { }
 
@@ -29,9 +29,15 @@ export class ProductService {
   }
 
   delete(id: number) {
-    return this.httpClient.delete(this.productsUrl + "/" + id, {
-      headers: this.defaultHeaders
-    });
+    return this.httpClient.delete(this.productsUrl + "/" + id);
+  }
+
+  getById(id:number){
+    return this.httpClient.get(this.productsUrl + "/" + id);
+  }
+
+  getByCategory(categoryId:number){
+    return this.httpClient.get(this.productsUrl + "?categoryId=" + categoryId);
   }
 
 }

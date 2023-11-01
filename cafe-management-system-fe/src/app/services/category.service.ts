@@ -28,4 +28,8 @@ export class CategoryService {
   getCategories() {
     return this.httpClient.get(this.url + "/categories");
   }
+
+  getFilteredCategories(){
+    return this.httpClient.get(this.url + "/categories?filterValue=true")
+  }
 }
