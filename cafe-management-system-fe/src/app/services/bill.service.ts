@@ -26,5 +26,9 @@ export class BillService {
   getBills() {
     return this.httpClient.get(this.billsUrl);
   }
+
+  delete(id:number){
+    return this.httpClient.delete(this.billsUrl + "/" + id);
+  }
   
 }
