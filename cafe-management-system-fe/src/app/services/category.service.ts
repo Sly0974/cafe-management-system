@@ -7,29 +7,30 @@ import { environment } from 'src/environments/environment';
 })
 export class CategoryService {
 
-  url = environment.apiUrl;
+  private readonly categoriesUrl:string = environment.apiUrl + "/categories";
+  private readonly defaultHeaders:HttpHeaders = new HttpHeaders().set("Content-Type", "application/json");
 
   constructor(private httpClient: HttpClient) {
 
   }
 
   add(data: any) {
-    return this.httpClient.post(this.url + "/categories", data, {
+    return this.httpClient.post(this.categoriesUrl, data, {
       headers: new HttpHeaders().set("Content-Type", "application/json")
     });
   }
 
   update(data: any) {
-    return this.httpClient.put(this.url + "/categories", data, {
+    return this.httpClient.put(this.categoriesUrl, data, {
       headers: new HttpHeaders().set("Content-Type", "application/json")
     });
   }
 
-  getCategories() {
-    return this.httpClient.get(this.url + "/categories");
+  getAll() {
+    return this.httpClient.get(this.categoriesUrl);
   }
 
-  getFilteredCategories(){
-    return this.httpClient.get(this.url + "/categories?filterValue=true")
+  getAllActive(){
+    return this.httpClient.get(this.categoriesUrl + "?active=true")
   }
 }

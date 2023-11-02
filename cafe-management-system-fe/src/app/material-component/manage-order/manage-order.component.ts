@@ -48,7 +48,7 @@ export class ManageOrderComponent implements OnInit {
   }
 
   getCategories() {
-    this.categoryService.getFilteredCategories().subscribe((response: any) => {
+    this.categoryService.getAllActive().subscribe((response: any) => {
       this.ngxService.stop();
       this.categories = response;
     }, (error: any) => {

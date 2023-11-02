@@ -32,7 +32,7 @@ export class ManageCategoryComponent implements OnInit {
   }
 
   tableData() {
-    this.categoryService.getCategories().subscribe((response:any)=>{
+    this.categoryService.getAll().subscribe((response:any)=>{
         this.ngxService.stop();
         this.dataSource = new MatTableDataSource(response);
     }, (error:any)=>{

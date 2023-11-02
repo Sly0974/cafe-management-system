@@ -7,35 +7,34 @@ import { environment } from 'src/environments/environment';
 })
 export class UserService {
 
-  url: string = environment.apiUrl;
+  private readonly userUrl:string = environment.apiUrl + "/user";
+  private readonly defaultHeaders: HttpHeaders = new HttpHeaders().set("Content-Type", "application/json");
 
   constructor(private httpClient: HttpClient) { }
 
   signup(data: any) {
-    return this.httpClient.post(this.url + "/user/signup",
+    return this.httpClient.post(this.userUrl + "/signup",
       data,
-      { headers: new HttpHeaders().set("Content-Type", "application/json") });
+      { headers: this.defaultHeaders });
   }
 
   forgotPassword(data: any) {
-    return this.httpClient.post(this.url + "/user/forgotPassword",
+    return this.httpClient.post(this.userUrl + "/forgotPassword",
       data,
-      { headers: new HttpHeaders().set("Content-Type", "application/json") });
+      { headers: this.defaultHeaders });
   }
 
   login(data: any) {
-    return this.httpClient.post(this.url + "/user/login",
-      data,
-      { headers: new HttpHeaders().set("Content-Type", "application/json") });
+    return this.httpClient.post(this.userUrl + "/login",
+      data, { headers: this.defaultHeaders });
   }
 
-  checkToken(){
-    return this.httpClient.get(this.url + "/user/checkToken")
+  checkToken() {
+    return this.httpClient.get(this.userUrl + "/checkToken")
   }
 
-  changePassword(data:any){
-    return this.httpClient.post(this.url + "/user/changePassword",
-    data,
-    { headers: new HttpHeaders().set("Content-Type", "application/json") });
+  changePassword(data: any) {
+    return this.httpClient.post(this.changePassword + "/changePassword",
+      data, { headers: this.defaultHeaders });
   }
 }
