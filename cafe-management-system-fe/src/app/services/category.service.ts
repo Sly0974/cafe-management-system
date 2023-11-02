@@ -16,13 +16,13 @@ export class CategoryService {
 
   add(data: any) {
     return this.httpClient.post(this.categoriesUrl, data, {
-      headers: new HttpHeaders().set("Content-Type", "application/json")
+      headers: this.defaultHeaders
     });
   }
 
   update(data: any) {
     return this.httpClient.put(this.categoriesUrl, data, {
-      headers: new HttpHeaders().set("Content-Type", "application/json")
+      headers: this.defaultHeaders
     });
   }
 
