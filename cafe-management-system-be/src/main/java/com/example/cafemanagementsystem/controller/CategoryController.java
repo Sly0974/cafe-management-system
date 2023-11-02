@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -46,8 +47,9 @@ public class CategoryController {
 
     @GetMapping
     @Operation(summary = "Get all categories")
-    ResponseEntity<List<CategoryDto>> findAll() {
+    ResponseEntity<List<CategoryDto>> findAll(@RequestParam(required = false) final Boolean active) {
         try {
+            //TODO: implement find only active
             return categoryService.findAll();
         } catch (Exception ex) {
             log.error("Failed call findAll: {}", ex);
