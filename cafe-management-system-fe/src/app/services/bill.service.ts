@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -18,8 +19,8 @@ export class BillService {
     })
   }
 
-  getPdf(id: number) {
-    return this.httpClient.get(this.billsUrl + "/" + id + "/pdf");
+  getPdf(id: number):Observable<Blob> {
+    return this.httpClient.get(this.billsUrl + "/" + id + "/pdf", {responseType:'blob'});
   }
 
   getBills() {
