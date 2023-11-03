@@ -37,4 +37,14 @@ export class UserService {
     return this.httpClient.post(this.changePassword + "/changePassword",
       data, { headers: this.defaultHeaders });
   }
+
+  getAll() {
+    return this.httpClient.get(this.userUrl + "/get");
+  }
+
+  update(data: any) {
+    return this.httpClient.post(this.userUrl + "/update", data, {
+      headers: this.defaultHeaders
+    });
+  }
 }
