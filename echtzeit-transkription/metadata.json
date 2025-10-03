@@ -1,0 +1,7 @@
+{
+  "name": "Echtzeit-Transkription",
+  "description": "Eine Anwendung, die gesprochene Sprache in Echtzeit in Text umwandelt, um Menschen mit Hörbeeinträchtigungen zu unterstützen. Starten Sie die App und sie beginnt sofort mit der Transkription.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
